@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Objects</title>
+    <style>
+      .data {
+        padding: 15px;
+        border: 1px solid black;
+        text-align: center;
+        width: 100px;
+      }
+      .item-available{
+        margin: 50px 0px;
+      }
+      center{
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+    <input type="text" name="item" id="item" placeholder="Item" />
+    <input type="text" name="fit" id="fit" placeholder="Fit" />
+    <input type="price" name="item" id="price" placeholder="Price" />
+    <input type="text" name="rating" id="rating" placeholder="Rating" />
+    <button onclick="add()">Add Item</button>
+    <table class="item-available">
+      <tr>
+        <th class="data item">Item</th>
+        <th class="data">Fit</th>
+        <th class="data">Price</th>
+        <th class="data">Rating</th>
+      </tr>
+    </table>
+  </center>
+    <script>
+      let number;
+      function add() {
+        let productId = localStorage.getItem("item-count") || 1;
+        let productCode = "product" + productId;
+        localStorage.setItem("item-count", productId);
+        let product = productData();
+        console.log(product);
+        localStorage.setItem(productCode, JSON.stringify(product));
+        window.location.reload();
+        productId++;
+        localStorage.setItem("item-count", productId);
+      }
+      function productData() {
+        let item_data = {
+          item: document.querySelector("#item").value,
+          fit: document.querySelector("#fit").value,
+          price: document.querySelector("#price").value,
+          rating: document.querySelector("#rating").value,
+        };
+        return item_data;
+      }
+      function showItems() {
+        let itemCount = localStorage.getItem("item-count");
+        console.log(itemCount);
+        for (i = 1; i < itemCount; i++) {
+          let productCode = "product" + i;
+          let product = JSON.parse(localStorage.getItem(productCode));
+          console.log(JSON.parse(localStorage.getItem(productCode)));
+          let element = document.querySelector(".item-available");
+          let child = document.createElement("tr");
+          let productAvailable = {
+            item: document.createElement("td"),
+            fit: document.createElement("td"),
+            price: document.createElement("td"),
+            rating: document.createElement("td"),
+          };
+          productAvailable.item.classList.add("data");
+          productAvailable.fit.classList.add("data");
+          productAvailable.price.classList.add("data");
+          productAvailable.rating.classList.add("data");
+          productAvailable.item.innerText = product.item;
+          productAvailable.fit.innerText = product.fit;
+          productAvailable.price.innerText = product.price;
+          productAvailable.rating.innerText = product.rating;
+          //let productData = `Item: ${product.item}, Fit: ${product.fit}, Price: ${product.price}, Rating: ${product.rating}`;
+          //child.innerText = productData;
+          child.appendChild(productAvailable.item);
+          child.appendChild(productAvailable.fit);
+          child.appendChild(productAvailable.price);
+          child.appendChild(productAvailable.rating);
+          element.appendChild(child);
+        }
+      }
+      showItems();
+    </script>
+  </body>
+</html>
